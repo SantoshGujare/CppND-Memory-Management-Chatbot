@@ -20,7 +20,7 @@ ChatBot::ChatBot()
 // constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename)
 {
-    std::cout << "ChatBot Constructor" << std::endl;
+    std::cout << "Debug message --ChatBot Constructor" << std::endl;
     
     // invalidate data handles
     _chatLogic = nullptr;
@@ -29,10 +29,10 @@ ChatBot::ChatBot(std::string filename)
     // load image into heap memory
     _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
 }
-
+//1. Destructor ( Free up memory in destructor )
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor" << std::endl;
+    std::cout << "Debug message ChatBot Destructor" << std::endl;
 
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
@@ -44,7 +44,66 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+// 2. Copy Contructor
+ChatBot::ChatBot(const ChatBot &chatbotsrc)
+{
+    std::cout << "Debug message -- Copy Constructor Called for ChatBot" << std::endl;
+    _image = new wxBitmap(*chatbotsrc._image);
+    _chatLogic = chatbotsrc._chatLogic;
+    _rootNode = chatbotsrc._rootNode;
 
+}
+ 
+// 3. Copy Assignment (overloading = operator )
+ChatBot& ChatBot:: operator=(const ChatBot &chatbotsrc)
+{
+    std::cout << "Debug message -- Copy Assignment Called for ChatBot" << std::endl;
+    if(this == &chatbotsrc)
+    {
+        return *this;
+    }
+    delete _image;
+    _image = new wxBitmap(*chatbotsrc._image);
+    _chatLogic = chatbotsrc._chatLogic;
+    _rootNode = chatbotsrc._rootNode;
+    return *this;
+}
+
+// 4. Move Contructor 
+ChatBot::ChatBot(ChatBot &&chatbotsrc)
+{
+    std::cout << "Debug message -- Move Constructor Called for ChatBot" << std::endl;
+    _image = chatbotsrc._image;
+    _chatLogic = chatbotsrc._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _rootNode = chatbotsrc._rootNode;
+
+    chatbotsrc._image = NULL;
+    chatbotsrc._chatLogic = nullptr;
+    chatbotsrc._rootNode = nullptr;
+}
+
+// 5. Move Assigmnet (overloading = operator) 
+ChatBot& ChatBot:: operator=(ChatBot &&chatbotsrc)
+{
+    std::cout << "Debug message -- Move Assigmnet Called for ChatBot" << std::endl;
+    if(this == &chatbotsrc)
+    {
+        return *this;
+    }
+    delete _image;
+    _image = new wxBitmap(*chatbotsrc._image);
+    _image = chatbotsrc._image;
+    _chatLogic = chatbotsrc._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _rootNode = chatbotsrc._rootNode;   
+
+    chatbotsrc._image = NULL;
+    chatbotsrc._chatLogic = nullptr;
+    chatbotsrc._rootNode = nullptr;
+
+    return *this;
+}
 ////
 //// EOF STUDENT CODE
 
