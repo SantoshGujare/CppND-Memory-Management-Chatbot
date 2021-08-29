@@ -116,9 +116,11 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
 
     //// STUDENT CODE
     ////
-
+    std::cout << "Debug message -- Constructor Called for ChatBotPanelDialog" << std::endl;
     // create chat logic instance
-    _chatLogic = new ChatLogic(); 
+    //_chatLogic = new ChatLogic(); -
+
+    _chatLogic = std::make_unique<ChatLogic>(); // R.23: Use make_unique() to make unique_ptrs
 
     // pass pointer to chatbot dialog so answers can be displayed in GUI
     _chatLogic->SetPanelDialogHandle(this);
@@ -135,7 +137,9 @@ ChatBotPanelDialog::~ChatBotPanelDialog()
     //// STUDENT CODE
     ////
 
-    delete _chatLogic;
+    //delete _chatLogic;
+    // With smart pointer there is no need to explicitly call to delete pointer (free memory).
+    std::cout << "Debug message -- Destructor Called for ChatBotPanelDialog" << std::endl;
 
     ////
     //// EOF STUDENT CODE
